@@ -11,7 +11,7 @@ def main():
 def obter_pagina_e_profundidade():
     print("------digite a palavra a pagina e a profundidade------")
     profundidade=int(input("digite a profundidade: "))
-    palavra=raw_input("digite a palavra: ")
+    palavra=input("digite a palavra: ")
     url="http://libra.ifpi.edu.br/a-instituicao/reitoria"
     obter_links(profundidade,url,palavra)
     pass
@@ -23,14 +23,14 @@ def obter_links(profundidade,url,palavra):
     l=[]
     if(profundidade>0):
         for i in res.find_all("a"):
-            procura_links(i,palavra)
+            procura_links(i,palavra,profundidade)
     if(profundidade==0):
         ocorrencias(response,palavra)
-        #encontra_trecho(response.content,palavra)
         print(encontrar_palavras(response.text,palavra))
     pass
 
-def procura_links(links,palavra):
+def procura_links(links,palavra,profundidade):
+    profundidade-=profundidade
     list_links=[]
     link=links.get("href").strip("http://")
     if(link.find("#")==0):
@@ -40,23 +40,16 @@ def procura_links(links,palavra):
         bs=BeautifulSoup(r.text,"html.parser")
         for i in bs.find_all("a"):
             print(i.get("href"))
+            ocorrencias(bs, palavra)
             list_links.append(i.get("href"))
-    for j in list_links:
-        response=requests.get(j)
-        res = BeautifulSoup(response.text,"html.parser")
-        for h in res.find_all("a"):
-            procura_links(i)
+            '''for j in list_links:
+                response=requests.get(j)
+                res = BeautifulSoup(response.text,"html.parser")
+                for h in res.find_all("a"):
+                    print("entrou")
+                    ocorrencias(bs, palavra)
+                    procura_links(i, palavra)'''
     pass
-'''def encontra_trecho(response,palavra):
-    lista=[]
-    for i in re.finditer(palavra.lower(),response.lower()):
-        print(tuple(i.groups()))
-        lista.append(i)
-    lista_palavras=[]
-    for j in lista:
-        lista_palavras.append(lista[-10:+10])
-    for h in range(len(lista_palavras)):
-        print(lista_palavras[h])'''
 
 def ocorrencias(pagina,palavra):
     lista_palavras=re.finditer(palavra,pagina.text)
@@ -72,5 +65,3 @@ def encontrar_palavras(response,palavra):
 if __name__=="__main__":
     main()
 
-#pegar os links de todas as paginas
-#pegar as paginas dos links e encontrar as palavras
