@@ -26,8 +26,6 @@ def obter_links(profundidade,url,palavra):
         l.append(i)
     ocorrencias(response,palavra)
     encontra_palavras(response,palavra)
-    '''for j in range(len(l)):
-        procura_palavras(l[j],palavra)'''
     pass
 
 def procura_links(j,palavra):
@@ -59,6 +57,7 @@ def encontrar_palavras(page,palavra):
         lista_palavras+=palavra
     return lista_palavras
     pass
+
 if __name__=="__main__":
     main()
 
